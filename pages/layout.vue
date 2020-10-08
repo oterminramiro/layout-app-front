@@ -1,21 +1,31 @@
 <template>
-  <div class="container">
-    <div class="row px-0 w-100">
-    	<div class="col-8 mx-auto px-0">
-			<h2>Layout</h2>
-			<div class="row" v-for="n in 6">
-				<div class="col" v-for="n in 5" style="height:50px;border:1px solid red">
-					{{ n }}
+	<div class="container">
+		<div class="row px-0 w-100">
+			<div class="col-8 mx-auto px-0">
+				<h2 class="mb-5">Layout</h2>
+				<div class="row mt-2" v-for="n in 6">
+					<div class="col px-0" v-for="n in 5">
+						<b-button v-on:click="saludar" size="lg" variant="primary" style="width:85px; height: 85px">{{ n }}</b-button>
+					</div>
 				</div>
 			</div>
-
-    	</div>
-    </div>
-  </div>
+		</div>
+	</div>
 </template>
 
 <script>
-export default {}
+export default {
+	methods: {
+		saludar: function (event) {
+			if (event) {
+				event.target.classList.remove("btn-primary");
+				event.target.classList.add("btn-secondary");
+				event.target.classList.add("disabled");
+				console.log(event.target)
+			}
+		}
+	}
+}
 </script>
 
 <style>
