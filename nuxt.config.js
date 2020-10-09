@@ -15,8 +15,11 @@ export default {
 		]
 	},
 
+	transition: 'page',
+
 	// Global CSS (https://go.nuxtjs.dev/config-css)
 	css: [
+		'~/assets/main.css'
 	],
 
 	// Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
