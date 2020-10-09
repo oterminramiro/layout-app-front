@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<div class="row px-0 w-100">
-			<div class="col-8 mx-auto px-0">
+			<div class="col-6 mx-auto px-0">
 				<h2 class="mb-5">Layout</h2>
 				<div class="row mt-2" v-for="n in 6">
 					<div class="col px-0" v-for="n in 5">

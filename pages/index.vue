@@ -1,19 +1,11 @@
 <template>
   <div class="container">
     <div class="row px-0 w-100">
-    	<div class="col-8 mx-auto px-0">
+    	<div class="col-6 mx-auto px-0">
 			<h2>Bienvenido</h2>
 			<b-form @submit="onSubmit" @reset="onReset">
-				<b-form-group
-				id="input-group-1"
-				>
-					<b-form-input
-					id="input-1"
-					type="phone"
-					required
-					placeholder="Your phone"
-					size="lg"
-					></b-form-input>
+				<b-form-group id="input-group-1">
+					<VuePhoneNumberInput v-model="phone" />
 				</b-form-group>
 
 				<b-form-group id="input-group-4">
@@ -28,7 +20,24 @@
 </template>
 
 <script>
-export default {}
+	import VuePhoneNumberInput from 'vue-phone-number-input';
+	import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+
+	export default {
+		data(){
+			return {
+				phone: '',
+			}
+		},
+		methods: {
+			onReset(){
+
+			},
+			onSubmit(){
+
+			},
+		}
+	}
 </script>
 
 <style>
