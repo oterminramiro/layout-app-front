@@ -1,8 +1,12 @@
 <template>
 	<div class="container">
 		<div class="row">
-			<h2 class="col-12">Select your organization:</h2>
-			<div class="col">
+			<div class="col-6 mx-auto px-0 my-5">
+				<div class="text-center mx-auto">
+					<img class="img-fluid w-75" src="~/assets/undraw_preferences.svg" />
+					<h2 class="my-5">Select your organization:</h2>
+				</div>
+
 				<b-form-select class="my-3" :options="organizations" @change='getLocations($event)'></b-form-select>
 
 				<b-form-select class="my-3" v-show="locations.length > 0" :options="locations" @change='setLocation($event)'></b-form-select>
@@ -74,31 +78,5 @@ export default {
 
 <style>
 
-.container {
-	margin: 0 auto;
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-}
-
-.title {
-	font-family:
-	'Quicksand',
-	'Source Sans Pro',
-	-apple-system,
-	BlinkMacSystemFont,
-	'Segoe UI',
-	Roboto,
-	'Helvetica Neue',
-	Arial,
-	sans-serif;
-	display: block;
-	font-weight: 300;
-	font-size: 100px;
-	color: #35495e;
-	letter-spacing: 1px;
-}
 
 </style>
