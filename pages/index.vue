@@ -11,8 +11,8 @@
 						<VuePhoneNumberInput v-model="phone" required/>
 					</b-form-group>
 
-					<b-form-group id="input-group-4" class="text-center">
-						<b-form-checkbox size="sm" required>Acepto los <a href="#">terminos y condiciones</a></b-form-checkbox>
+					<b-form-group id="input-group-4" class="text-center" required>
+						<b-form-checkbox size="sm" name="terms" required>Acepto los <a href="#">terminos y condiciones</a></b-form-checkbox>
 					</b-form-group>
 
 					<b-button type="submit" class="mt-5" block variant="outline-dark">Submit</b-button>
