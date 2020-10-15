@@ -41,6 +41,7 @@
 	import axios from 'axios';
 
 	export default {
+		middleware: 'checkToken',
 		data(){
 			return {
 				layout: [],
