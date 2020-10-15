@@ -7,7 +7,7 @@
 					<h2 class="my-5">Bienvenido</h2>
 				</div>
 				<b-form @submit="onSubmit" class="w-75 mx-auto">
-					<b-form-input v-model="code" placeholder="Enter your code" required></b-form-input>
+					<b-form-input class="text-center" v-model="code" placeholder="Enter your code" required></b-form-input>
 					<b-button type="submit" class="mt-5" block variant="outline-dark">Submit</b-button>
 				</b-form>
 			</div>

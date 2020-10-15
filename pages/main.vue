@@ -11,9 +11,11 @@
 
 				<b-form-select class="my-3" v-show="locations.length > 0" :options="locations" @change='setLocation($event)'></b-form-select>
 
-				<nuxt-link v-show="link_slug" :to="{name: 'layout-id', params: { id:link_slug } }">
-					<b-button variant="outline-dark" class="my-3" >Continuar</b-button>
-				</nuxt-link>
+				<div class="text-center mx-auto">
+					<nuxt-link v-show="link_slug" :to="{name: 'layout-id', params: { id:link_slug } }">
+						<b-button variant="outline-dark" class="my-3 px-5" >Continuar</b-button>
+					</nuxt-link>
+				</div>
 
 				<div v-html="error" class="my-3">{{ error }}</div>
 			</div>
