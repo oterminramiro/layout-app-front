@@ -45,6 +45,7 @@
 					console.log(response.data)
 					if(response.data.success == 'true')
 					{
+						localStorage.setItem("jwt_token", response.data.token );
 						this.$router.push('/main')
 					}
 				})

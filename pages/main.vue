@@ -43,11 +43,22 @@ export default {
 	methods: {
 		getLocations: function(event){
 			this.error = ''
-			axios.get('http://localhost:8000/api/main/get_locations', {
-				params: {
-					guid: event
-				}
-			}).then(response => {
+			var token = localStorage.getItem('jwt_token')
+
+			var data = JSON.stringify( { "guid":event } );
+			var config = {
+				method: 'post',
+				url: 'http://localhost:8000/api/main/get_locations',
+				headers: {
+					'x-auth-token': token,
+					'Content-Type': 'application/json',
+				},
+				data: data
+			};
+
+			axios(config)
+			.then(response => {
+				console.log(response.data)
 				if(response.data.data.length == 0)
 				{
 					console.log('no data')
@@ -64,6 +75,7 @@ export default {
 				}
 			})
 			.catch(function (error) {
+				console.log(error)
 				this.error = 'Error'
 			});
 		},
@@ -81,7 +93,16 @@ export default {
 		},
 	},
 	created(){
-		axios.get('http://localhost:8000/api/main/get_organizations').then(response => {
+		var token = localStorage.getItem('jwt_token')
+		var config = {
+			method: 'get',
+			url: 'http://localhost:8000/api/main/get_organizations',
+			headers: {
+				'x-auth-token': token,
+			}
+		};
+		axios(config)
+		.then(response => {
 			response.data.data.forEach((item, i) => {
 				this.organizations.push({
 					'value': item.guid,

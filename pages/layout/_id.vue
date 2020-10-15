@@ -61,6 +61,8 @@
 				}
 			},
 			confirm_select: function(){
+				var token = localStorage.getItem('jwt_token')
+
 				var layout_array = []
 				var options = Array.from(document.getElementsByClassName('btn-secondary'))
 				options.forEach((item, i) => {
@@ -81,7 +83,8 @@
 					method: 'post',
 					url: 'http://localhost:8000/api/bookings/create',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'x-auth-token': token,
 					},
 					data : data
 				};
@@ -103,6 +106,7 @@
 			}
 		},
 		async mounted() {
+
 			this.$nextTick(() => {
 				this.people = JSON.parse(localStorage.getItem('layout_request')).people;
 				this.location = JSON.parse(localStorage.getItem('layout_request')).location;
@@ -110,11 +114,14 @@
 
 				var data = JSON.stringify({"guid":this.location});
 
+				var token = localStorage.getItem('jwt_token')
+
 				var config = {
 					method: 'post',
 					url: 'http://localhost:8000/api/main/get_layouts',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'x-auth-token': token,
 					},
 					data : data
 				};
