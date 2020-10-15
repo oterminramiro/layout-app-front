@@ -7,14 +7,19 @@
 					<h2 class="my-5">Select your organization:</h2>
 				</div>
 
-				<b-form-select class="my-3" :options="organizations" @change='getLocations($event)'></b-form-select>
-
-				<b-form-select class="my-3" v-show="locations.length > 0" :options="locations" @change='setLocation($event)'></b-form-select>
-
 				<div class="text-center mx-auto">
-					<nuxt-link v-show="link_slug" :to="{name: 'layout-id', params: { id:link_slug } }">
-						<b-button variant="outline-dark" class="my-3 px-5" >Continuar</b-button>
-					</nuxt-link>
+					<b-form @submit="onSubmit">
+						<label for="organizationinput">Elegi donde:</label>
+						<b-form-select id="organizationinput" class="mb-3" :options="organizations" @change='getLocations($event)' required></b-form-select>
+
+						<b-form-select class="my-3" v-show="locations.length > 0" :options="locations" @change='setLocation($event)' required></b-form-select>
+
+
+						<label for="spinbutton">Cantidad de personas:</label>
+						<b-form-spinbutton id="sppinbutton" v-model="people" min="1" max="5" required></b-form-spinbutton>
+
+						<b-button type="submit" variant="outline-dark" class="my-3 px-5" >Continuar</b-button>
+					</b-form>
 				</div>
 
 				<div v-html="error" class="my-3">{{ error }}</div>
@@ -30,8 +35,9 @@ export default {
 		return {
 			organizations: [],
 			locations: [],
+			people: 1,
 			error: '',
-			link_slug: false
+			link_slug: ''
 		}
 	},
 	methods: {
@@ -63,7 +69,16 @@ export default {
 		},
 		setLocation: function(event){
 			this.link_slug = event
-		}
+		},
+		onSubmit: function(){
+			event.preventDefault();
+			var data = {
+				location: this.link_slug,
+				people: this.people,
+			}
+			localStorage.setItem("layout_request", JSON.stringify(data) );
+			this.$router.push('/layout/'+this.link_slug)
+		},
 	},
 	created(){
 		axios.get('http://localhost:8000/api/main/get_organizations').then(response => {
