@@ -88,7 +88,14 @@
 
 				axios(config)
 				.then(response => {
-					console.log(response.data)
+					if(response.data.success == 'true')
+					{
+						this.$router.push('/success')
+					}
+					else
+					{
+						console.log(response.data)
+					}
 				})
 				.catch(error => {
 					console.log(error);
