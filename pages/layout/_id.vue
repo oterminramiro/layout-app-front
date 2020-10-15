@@ -45,6 +45,9 @@
 			return {
 				layout: [],
 				loading: true,
+				people: null,
+				location: null,
+				customer: null,
 			}
 		},
 		methods: {
@@ -58,15 +61,47 @@
 				}
 			},
 			confirm_select: function(){
+				var layout_array = []
 				var options = Array.from(document.getElementsByClassName('btn-secondary'))
 				options.forEach((item, i) => {
-					console.log(item.id)
+					layout_array.push(
+						{"layoutid": item.id}
+					)
+				});
+
+				var data = JSON.stringify(
+					{
+						"customerid": this.customer,
+						"locationid": this.location,
+						"people": this.people,
+						"layout": layout_array
+					}
+				);
+				var config = {
+					method: 'post',
+					url: 'http://localhost:8000/api/bookings/create',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					data : data
+				};
+
+				axios(config)
+				.then(response => {
+					console.log(response.data)
+				})
+				.catch(error => {
+					console.log(error);
 				});
 			}
 		},
 		async mounted() {
 			this.$nextTick(() => {
-				var data = JSON.stringify({"guid":this.$route.params.id});
+				this.people = JSON.parse(localStorage.getItem('layout_request')).people;
+				this.location = JSON.parse(localStorage.getItem('layout_request')).location;
+				this.customer = localStorage.getItem("customer_id");
+
+				var data = JSON.stringify({"guid":this.location});
 
 				var config = {
 					method: 'post',
@@ -81,7 +116,6 @@
 				.then(response => {
 					this.layout = response.data.data;
 					this.loading = false
-					// console.log(response.data.data)
 				})
 				.catch(error => {
 					console.log(error);
