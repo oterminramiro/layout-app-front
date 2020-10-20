@@ -77,9 +77,9 @@
 						{
 							this.$notify({
 								group: 'foo',
-								title: 'Important message',
-								text: 'Hello user! This is a notification!',
-								type: 'success',
+								title: 'Error',
+								text: 'Limite alcanzado!',
+								type: 'error',
 							});
 						}
 					}
