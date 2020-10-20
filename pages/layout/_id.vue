@@ -6,7 +6,7 @@
 	</transition>
 	<div class="container" v-else>
 		<div class="row">
-			<div class="col-6 mx-auto px-0 my-5">
+			<div class="col mx-auto my-5">
 				<div class="text-center mx-auto">
 					<img class="img-fluid w-50 mb-4" src="~/assets/undraw_selected.svg" />
 					<!-- <h2 class="my-5">Layout</h2> -->
@@ -54,10 +54,18 @@
 		methods: {
 			select_layout: function (event) {
 				if (event) {
-					// console.log(this.layout)
-					event.target.classList.remove("btn-primary");
-					event.target.classList.add("btn-secondary");
-					event.target.classList.add("disabled");
+					if(event.target.classList.contains("btn-secondary"))
+					{
+						event.target.classList.add("btn-primary");
+						event.target.classList.remove("btn-secondary");
+						event.target.classList.remove("disabled");
+					}
+					else
+					{
+						event.target.classList.add("disabled");
+						event.target.classList.add("btn-secondary");
+						event.target.classList.remove("btn-primary");
+					}
 					//console.log(event.target)
 				}
 			},

@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<div class="row">
-			<div class="col-6 mx-auto px-0 my-5">
+			<div class="mx-auto px-0 my-5">
 				<div class="text-center mx-auto">
 					<img class="img-fluid w-75" src="~/assets/undraw_book.svg" />
 					<h2 class="my-5">Bienvenido</h2>

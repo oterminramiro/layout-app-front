@@ -1,13 +1,13 @@
 <template>
 	<div class="container">
 		<div class="row">
-			<div class="col-6 mx-auto px-0 my-5">
+			<div class="col mx-auto px-0 my-5">
 				<div class="text-center mx-auto">
 					<img class="img-fluid w-75" src="~/assets/undraw_preferences.svg" />
 					<h2 class="my-5">Select your organization:</h2>
 				</div>
 
-				<div class="text-center mx-auto">
+				<div class="text-center mx-auto w-75">
 					<b-form @submit="onSubmit">
 						<label for="organizationinput">Elegi donde:</label>
 						<b-form-select id="organizationinput" class="mb-3" :options="organizations" @change='getLocations($event)' required></b-form-select>
