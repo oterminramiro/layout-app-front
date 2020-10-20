@@ -5,6 +5,7 @@
 		</div>
 	</transition>
 	<div class="container" v-else>
+		<notifications group="foo" position="top center" classes="vue-notification mt-3" width='90%'/>
 		<div class="row">
 			<div class="col mx-auto my-5">
 				<div class="text-center mx-auto">
@@ -39,6 +40,7 @@
 
 <script>
 	import axios from 'axios';
+	import Notifications from 'vue-notification';
 
 	export default {
 		middleware: 'checkToken',
@@ -53,6 +55,9 @@
 		},
 		methods: {
 			select_layout: function (event) {
+
+				var options = Array.from(document.getElementsByClassName('btn-secondary'))
+
 				if (event) {
 					if(event.target.classList.contains("btn-secondary"))
 					{
@@ -62,12 +67,27 @@
 					}
 					else
 					{
-						event.target.classList.add("disabled");
-						event.target.classList.add("btn-secondary");
-						event.target.classList.remove("btn-primary");
+						if(options.length < this.people)
+						{
+							event.target.classList.add("disabled");
+							event.target.classList.add("btn-secondary");
+							event.target.classList.remove("btn-primary");
+						}
+						else
+						{
+							this.$notify({
+								group: 'foo',
+								title: 'Important message',
+								text: 'Hello user! This is a notification!',
+								type: 'success',
+							});
+						}
 					}
 					//console.log(event.target)
 				}
+
+				// var options = Array.from(document.getElementsByClassName('btn-secondary'))
+				// console.log(options.length)
 			},
 			confirm_select: function(){
 				var token = localStorage.getItem('jwt_token')
