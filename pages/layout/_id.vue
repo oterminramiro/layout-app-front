@@ -10,7 +10,6 @@
 			<div class="col mx-auto my-5">
 				<div class="text-center mx-auto">
 					<img class="img-fluid w-50 mb-4" src="~/assets/undraw_selected.svg" />
-					<!-- <h2 class="my-5">Layout</h2> -->
 				</div>
 				<div class="row mt-2" v-for="row in layout">
 					<div class="col text-center" v-for="col in row">
@@ -49,6 +48,7 @@
 				layout: [],
 				loading: true,
 				people: null,
+				date: null,
 				location: null,
 				customer: null,
 			}
@@ -105,6 +105,7 @@
 						"customerid": this.customer,
 						"locationid": this.location,
 						"people": this.people,
+						"date": this.date,
 						"layout": layout_array
 					}
 				);
@@ -137,6 +138,7 @@
 		async mounted() {
 
 			this.$nextTick(() => {
+				this.date = JSON.parse(localStorage.getItem('layout_request')).date;
 				this.people = JSON.parse(localStorage.getItem('layout_request')).people;
 				this.location = JSON.parse(localStorage.getItem('layout_request')).location;
 				this.customer = localStorage.getItem("customer_id");
