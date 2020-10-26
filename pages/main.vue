@@ -9,45 +9,38 @@
 				</div>
 
 				<div class="text-center mx-auto w-75">
-					<b-form @submit="onSubmit">
+					<b-form @submit="onSubmit" id="mainForm">
+
 						<label for="organizationinput">Elegi donde:</label>
-						<b-form-select id="organizationinput" class="mb-3" :options="organizations" @change='getLocations($event)' required></b-form-select>
+						<b-form-select id="organizationinput" class="mb-3" :options="responses.organizations" @change='getLocations' v-model="data.organization" required></b-form-select>
 
-						<b-form-select class="my-3" v-show="locations.length > 0" :options="locations" @change='setLocation($event)' required></b-form-select>
+						<b-form-select class="my-3" v-show="responses.locations.length > 0" :options="responses.locations" @change='getTimes' v-model="data.location" required></b-form-select>
 
+						<div v-show="data.location">
 
-						<label for="spinbutton">Cantidad de personas:</label>
-						<b-form-spinbutton id="sppinbutton" v-model="people" min="1" max="5" required></b-form-spinbutton>
+							<label for="spinbutton">Cantidad de personas:</label>
+							<b-form-spinbutton id="sppinbutton" v-model="data.people" min="1" max="5" required></b-form-spinbutton>
 
-						<div class="my-3" style="">
-							<label for="datepicker">Dia:</label>
-							<date-picker id="datepicker"
-								v-model="date"
+							<div class="my-3" style="">
+								<label for="datepicker">Dia:</label>
+								<date-picker id="datepicker"
+								v-model="data.date"
 								:placeholder="'Dia'"
 								:language="es"
 								:format="'yyyy MM dd'"
 								:bootstrap-styling="true"
 								:calendar-button="true"
 								:disabled-dates="disabled_dates"
-							></date-picker>
-						</div>
+								></date-picker>
+							</div>
 
-						<div class="my-3">
-							<label for="timepicker">Hora:</label>
-							<time-picker id="timepicker"
-								close-on-complete
-								v-model="time"
-								:placeholder="'Hora'"
-								:input-width="'100%'"
-								:input-class="['form-control']"
-							></time-picker>
-						</div>
+							<label for="timeinput">Hora:</label>
+							<b-form-select id="timeinput" class="mb-3" :options="responses.times" v-model="data.time" required></b-form-select>
 
-						<b-button type="submit" variant="outline-dark" class="my-3 px-5" >Continuar</b-button>
+							<b-button type="submit" variant="outline-dark" class="my-3 px-5" >Continuar</b-button>
+						</div>
 					</b-form>
 				</div>
-
-				<div v-html="error" class="my-3">{{ error }}</div>
 			</div>
 		</div>
 	</div>
@@ -65,24 +58,28 @@ export default {
 		var today_date_less_1 = new Date(today_date.getTime() - (24*60*60*1000));
 		return {
 			es:es,
-			organizations: [],
-			locations: [],
-			people: 1,
-			error: '',
-			link_slug: '',
-			date: null,
-			time: null,
 			disabled_dates: {
 				to: today_date_less_1,
-			}
+			},
+			responses: {
+				organizations: [],
+				locations: [],
+				times: [],
+			},
+			data: {
+				organization: null,
+				location: null,
+				people: 1,
+				date: null,
+				time: null,
+			},
 		}
 	},
 	methods: {
-		getLocations: function(event){
-			this.error = ''
-			var token = localStorage.getItem('jwt_token')
+		getLocations: function(){
+			var token = localStorage.getItem('jwt_token');
 
-			var data = JSON.stringify( { "guid":event } );
+			var data = JSON.stringify( { "guid": this.data.organization } );
 			var config = {
 				method: 'post',
 				url: 'http://localhost:8000/api/main/get_locations',
@@ -95,16 +92,19 @@ export default {
 
 			axios(config)
 			.then(response => {
-				console.log(response.data)
 				if(response.data.data.length == 0)
 				{
-					console.log('no data')
-					this.error = 'Esta organizacion no tiene locations'
+					this.$notify({
+						group: 'foo',
+						title: 'Error',
+						text: 'Esta organizacion no tiene locations',
+						type: 'error',
+					});
 				}
 				else
 				{
 					response.data.data.forEach((item, i) => {
-						this.locations.push({
+						this.responses.locations.push({
 							'value': item.guid,
 							'text': item.name,
 						})
@@ -112,17 +112,50 @@ export default {
 				}
 			})
 			.catch(function (error) {
-				console.log(error)
-				this.error = 'Error'
+				this.$notify({
+					group: 'foo',
+					title: 'Error',
+					text: error,
+					type: 'error',
+				});
 			});
 		},
-		setLocation: function(event){
-			this.link_slug = event
+		getTimes: function(){
+			var token = localStorage.getItem('jwt_token');
+
+			var data = JSON.stringify( { "guid": this.data.location } );
+			var config = {
+				method: 'post',
+				url: 'http://localhost:8000/api/main/get_time',
+				headers: {
+					'x-auth-token': token,
+					'Content-Type': 'application/json',
+				},
+				data: data
+			};
+
+			axios(config)
+			.then(response => {
+				response.data.data.forEach((item, i) => {
+					this.responses.times.push({
+						'value': item,
+						'text': item,
+					})
+				});
+			})
+			.catch(function (error) {
+				this.$notify({
+					group: 'foo',
+					title: 'Error',
+					text: error,
+					type: 'error',
+				});
+			});
 		},
 		onSubmit: function(){
 			event.preventDefault();
-			console.log(this.date)
-			if(this.date == null)
+
+			if(this.data.date == null)
 			{
 				this.$notify({
 					group: 'foo',
@@ -131,44 +164,19 @@ export default {
 					type: 'error',
 				});
 			}
-			if(this.time == null)
+			else
 			{
-				this.$notify({
-					group: 'foo',
-					title: 'Error',
-					text: 'Hora incompleta',
-					type: 'error',
-				});
-			}
+				let formatted_date = this.data.date.getFullYear() + "-" + (this.data.date.getMonth() + 1) + "-" + this.data.date.getDate()
+				let formatted_time = this.data.time + ":00"
+				let timestamp = formatted_date + " " + formatted_time
 
-			if(this.time != null && this.date != null)
-			{
-				var time_format = this.time.HH + ":" + this.time.mm
-				var regex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/
-				if(!regex.test(time_format))
-				{
-					this.$notify({
-						group: 'foo',
-						title: 'Error',
-						text: 'Hora incompleta',
-						type: 'error',
-					});
+				var data = {
+					location: this.data.location,
+					people: this.data.people,
+					date: timestamp,
 				}
-				else
-				{
-					let formatted_date = this.date.getFullYear() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getDate()
-					let formatted_time = time_format + ":00"
-
-					let timestamp = formatted_date + " " + formatted_time
-
-					var data = {
-						location: this.link_slug,
-						people: this.people,
-						date: formatted_date,
-					}
-					localStorage.setItem("layout_request", JSON.stringify(data) );
-					this.$router.push('/layout/'+this.link_slug)
-				}
+				localStorage.setItem("layout_request", JSON.stringify(data) );
+				this.$router.push('/layout/'+this.link_slug)
 			}
 		},
 	},
@@ -184,12 +192,20 @@ export default {
 		axios(config)
 		.then(response => {
 			response.data.data.forEach((item, i) => {
-				this.organizations.push({
+				this.responses.organizations.push({
 					'value': item.guid,
 					'text': item.name,
 				})
 			});
 		})
+		.catch(function (error) {
+			this.$notify({
+				group: 'foo',
+				title: 'Error',
+				text: error,
+				type: 'error',
+			});
+		});
 	}
 }
 </script>
