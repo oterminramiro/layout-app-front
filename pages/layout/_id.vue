@@ -143,7 +143,10 @@
 				this.location = JSON.parse(localStorage.getItem('layout_request')).location;
 				this.customer = localStorage.getItem("customer_id");
 
-				var data = JSON.stringify({"guid":this.location});
+				var data = JSON.stringify({
+					"guid":this.location,
+					"date": this.date,
+				});
 
 				var token = localStorage.getItem('jwt_token')
 
